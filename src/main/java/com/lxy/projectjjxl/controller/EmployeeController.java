@@ -51,7 +51,7 @@ public class EmployeeController {
      * @param ids
      * @return
      */
-    @DeleteMapping("/employee/{ids}")
+    @DeleteMapping("/employee/ids/{ids}")
     public ApiResult delete(@PathVariable List<Integer> ids){
         return ApiResult.success(employeeService.empDelete(ids));
     }
