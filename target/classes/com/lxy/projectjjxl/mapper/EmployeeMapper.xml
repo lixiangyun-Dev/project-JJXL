@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lxy.projectjjxl.mapper.EmployeeMapper">
+
+    <sql id="keys">
+        <trim suffixOverrides=",">
+            <if test="username != null and username != ''">username,</if>
+            <if test="password != null and password != ''">password,</if>
+            <if test="name != null and name != ''">name,</if>
+            <if test="sex != null and sex != ''">sex,</if>
+            <if test="image != null and image != ''">image,</if>
+            <if test="job != null and job != ''">job,</if>
+            <if test="entryDate != null">entry_date,</if>
+            <if test="deptId != null and deptId != ''">dept_id,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time</if>
+        </trim>
+    </sql>
+
+    <sql id="values">
+        <trim suffixOverrides=",">
+            <if test="username != null and username != ''">#{username},</if>
+            <if test="password != null and password != ''">#{password},</if>
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="sex != null and sex != ''">#{sex},</if>
+            <if test="image != null and image != ''">#{image},</if>
+            <if test="job != null and job != ''">#{job},</if>
+            <if test="entryDate != null">#{entryDate},</if>
+            <if test="deptId != null and deptId != ''">#{deptId},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime}</if>
+        </trim>
+    </sql>
+
+    <insert id="insert" parameterType="com.lxy.projectjjxl.domain.entity.Employee" keyProperty="id" useGeneratedKeys="true">
+        insert into
+            tb_employee(username,password,name,sex,image,job,entry_date,dept_id,create_time,update_time)
+        values (#{username},#{password},#{name},#{sex},#{image},#{job},#{entryDate},#{deptId},#{createTime},#{updateTime})
+    </insert>
+    <update id="empUpdate" parameterType="com.lxy.projectjjxl.domain.entity.Employee">
+        update tb_employee
+        <set>
+            <if test="name != null">name = #{name},</if>
+            <if test="sex != null">sex=#{sex},</if>
+            <if test="image != null">image=#{image},</if>
+            <if test="job != null">job=#{job},</if>
+            <if test="entryDate != null">entry_date=#{entryDate},</if>
+            <if test="deptId != null">dept_id=#{deptId},</if>
+            <if test="updateTime != null">update_time=#{updateTime}</if>
+        </set>
+        <where>
+            id = #{id}
+        </where>
+    </update>
+
+    <delete id="delete">
+        delete
+        from tb_employee
+        where id in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="list" resultType="com.lxy.projectjjxl.domain.entity.Employee">
+        select *
+        from tb_employee
+        <where>
+            <if test="name != null and name != ''">name like concat('%', #{name}, '%')</if>
+            <if test="sex != null and name != ''">and sex = #{sex}</if>
+            <if test="begin != null and end !=null">and entry_date between #{begin} and #{end}</if>
+        </where>
+        order by update_time desc
+    </select>
+
+</mapper>
